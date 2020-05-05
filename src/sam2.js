@@ -1,26 +1,29 @@
 jQuery( document ).ready(function($){
 
-  // Convert data in CSV to JSON
-  d3.csv("/data/cities.csv").then(function(citydata) {
+  $("#dataSelect").change(function(){
+    var source = this.value;
 
-    var headers = [];
-    for (key in citydata[0]) {
-      var header = {
-        title: key,
-        field: key
+    // Convert data in CSV to JSON
+    d3.csv("/data/" + source + ".csv").then(function(data) {
+
+      var headers = [];
+      for (key in data[0]) {
+        var header = {
+          title: key,
+          field: key
+        };
+        headers.push(header);
       };
-      headers.push(header);
-    };
 
-    //create Tabulator on DOM element with id "example-table"
-    var table = new Tabulator("#example-table", {
-     	layout:"fitColumns", //fit columns to width of table (optional)
-     	columns:headers
+      var table = new Tabulator("#data-table", {
+       	layout:"fitColumns", //fit columns to width of table (optional)
+       	columns:headers
+      });
+
+      table.setData(data);
+
     });
 
-    //load sample data into the table
-    table.setData(citydata);
-
-    }); // End d3 function
+  });
 
 });

@@ -15,15 +15,36 @@
       <header>
         <h1>CSV to table</h1>
       </header>
-      <p>Get some data from a .csv file and display it in a table.</p>
+      <p>Get some data from a user defined <code>.csv</code> file and display it in a table.</p>
       <ol>
-        <li>Get data and convert to object</li>
+        <li>Check which data the user wants to use</li>
+        <li>Get data and convert to array containing objects</li>
         <li>Put data into Tabulator table</li>
+        <li>Refresh table if user changes source</li>
       </ol>
 
-      <div id="example-table">
+      <p>Potential Roadmap:</p>
+      <ul>
+        <li>Scour <code>./data</code> directory to populate data selector</li>
+        <li>Accept either <code>.csv</code> or <code>JSON</code></li>
+      </ul>
+
+      <form>
+        <div class="form-group">
+          <label for="dataSelect">Select data</label>
+          <select class="form-control" id="dataSelect">
+            <option></option>
+            <option value="data">cars</option>
+            <option value="cities">cities</option>
+          </select>
+        </div>
+      </form>
+
+      <div id="data-table">
 
       </div>
+
+
 
     </div>
   </body>
