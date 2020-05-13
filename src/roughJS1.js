@@ -13,13 +13,15 @@ var table = new Tabulator("#example-table", {
 });
 
 //define some sample data
-var tabledata = [
+var tabledata111 = [
 	{id:1, name:"Oli Bob", age:"12", col:"red", dob:""},
 	{id:2, name:"Mary May", age:"1", col:"blue", dob:"14/05/1982"},
 	{id:3, name:"Christine Lobowski", age:"42", col:"green", dob:"22/05/1982"},
 	{id:4, name:"Brendon Philips", age:"125", col:"orange", dob:"01/08/1980"},
 	{id:5, name:"Margret Marmajuke", age:"16", col:"yellow", dob:"31/01/1999"},
 ];
+
+table.setData(tabledata111);
 
 var dataInViaD3Insitu = [
     {"name":"Andy Hunt",
@@ -34,13 +36,14 @@ var dataInViaD3Insitu = [
     }
    ]
 
-var dataInViaD3 = d3.json("/data/employees.json", function(data) {
+d3.json("/data/employees.json", function(data) {
     console.log("error:", error)
     console.log(data);
 
     return(data);
 });
 
+table.setData(data);
 
 // document.write("<br>", 'typeof tabledata', "<br>", typeof tabledata)
 // document.write("<br>")
@@ -57,16 +60,16 @@ console.log(dataInViaD3Insitu[0]);
 
 var file = "/data/employees.json";
 
-var URL1 = "https://people.sc.fsu.edu/~jburkardt/data/csv/addresses.csv";
+// var URL1 = "https://people.sc.fsu.edu/~jburkardt/data/csv/addresses.csv";
 
 console.log("PapaParse:");
 
-var onlineCVS1 = Papa.parse(URL1, {
-	download: true,
-	complete: function(results) {
-		console.log(results);
-	}
-});
+// var onlineCVS1 = Papa.parse(URL1, {
+// 	download: true,
+// 	complete: function(results) {
+// 		console.log(results);
+// 	}
+// });
 
 console.log(Object.keys(onlineCVS1));
 
@@ -86,4 +89,4 @@ console.log(Object.keys(onlineCVS1));
 var testdata1 = Object.entries(dataInViaD3);
 
 //load sample data into the table
-table.setData(dataInVionlineCVS1aD3Insitu);
+table.setData(tabledata111);

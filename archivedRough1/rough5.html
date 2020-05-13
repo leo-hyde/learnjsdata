@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <script src='lib/Chart.js'></script>
+    <link rel="stylesheet" href="lib/chartist/chartist.min.css">
+    <link href="https://unpkg.com/tabulator-tables@4.0.5/dist/css/tabulator.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Site content goes here !-->
+    <script src="lib/chartist/chartist.min.js"></script>
+    <script src='lib/d3.js'></script>
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.0.5/dist/js/tabulator.min.js"></script>
+
+    <div class="ct-chart ct-perfect-fourth"></div>
+    <div id="data-table">
+
+        <script>
+
+            // Get data 
+            d3.csv("/data/cities.csv").then(function (cities) {
+                // console.log("cities[0]");
+                // console.log(cities[0]);
+
+                // Convert data into 1D Arrays 
+                var xdata = cities.map(a => a.City);
+                var ydata = cities.map(a => a.Population);
+
+                console.log("xdata");
+                console.log(xdata);
+                console.log(ydata);
+
+                // Create Chart
+                var data = { labels: xdata, series: [ydata] };
+                new Chartist.Bar('.ct-chart', data);
+
+                // Create Table 
+
+                var headers = [];
+                for (key in cities[0]) {
+                    var header = {
+                        title: key,
+                        field: key
+                    };
+                    headers.push(header);
+                };
+
+                var table = new Tabulator("#data-table", {
+                    layout: "fitColumns", //fit columns to width of table (optional)
+                    columns: headers
+                });
+
+                table.setData(cities);
+
+
+            });
+
+
+
+
+        </script>
+
+
+        <script>
+
+        </script>
+
+
+</body>
+
+</html>

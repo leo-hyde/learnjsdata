@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>My first Chartist Tests</title>
+  <link rel="stylesheet" href="lib/chartist/chartist.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+
+</head>
+
+<body>
+
+  <!-- <label for="states">States</label> -->
+
+  <select name="states" id="states"></select>
+
+  <!-- <input type="submit" name="sbt_populate_select" id="sbt_populate_select" value="Populate Dropdown" /> -->
+
+  <script>
+
+    var states_array = ['Texas', 'Alabama', 'Illinois'];
+
+    // $('#sbt_populate_select').click(function (e) {
+
+      $.each(states_array, function (val, text) {
+        $('#states').append($('<option></option>').val(val).html(text))
+      });
+
+    //   e.preventDefault();
+    // });
+
+  </script>
+
+</body>
+
+</html>

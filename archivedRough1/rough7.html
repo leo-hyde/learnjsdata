@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="lib/chartist/chartist.min.css">
+    <link href="https://unpkg.com/tabulator-tables@4.0.5/dist/css/tabulator.min.css" rel="stylesheet">
+
+    <script src='lib/Chart.js'></script>
+    <script src="lib/chartist/chartist.min.js"></script>
+    <script src='lib/d3.js'></script>
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.0.5/dist/js/tabulator.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+
+
+</head>
+
+<body>
+    <div>       <select name="Dropdown1" id="Dropdown1"></select>    </div>
+    <div id='Plotly1'>    </div>
+
+    <div id='myDiv'>
+        <!-- Plotly chart will be drawn inside this DIV -->
+    </div>
+
+
+
+
+    <div class="ct-chart ct-perfect-fourth"></div>
+    <div id="data-table">
+
+        <script>
+
+            // Get data 
+            d3.csv("/data/SteelTimber1.csv").then(function (cities) {
+                console.log("cities", cities);
+
+                var uniqueOption = [... new Set(cities.map(a => a.Option))]
+                var uniqueID = [... new Set(cities.map(a => a.ID))]
+                console.log("uniqueOption", uniqueOption);
+
+                // Populate HTML dropdown with JS array using JQuery 
+                $('#Dropdown1').empty() // Empty dropdown of previous values 
+                $.each(uniqueID, function (val, text) {
+                    $('#Dropdown1').append($('<option></option>').val(val).html(text))
+                });
+
+                var IDSelected = uniqueID[0];
+                $("#Dropdown1").change(function () {
+                    var IDSelected = $(this).children("option:selected").text();
+                    // alert("You have selected - " + IDSelected);
+                    console.log("IDSelected", IDSelected);
+
+                    var filteredData1 = cities.filter(function (obj) {
+                       // return (obj['Option'] == 'Steel Beams & Timber Slab') && (obj['ID'] == IDSelected);
+                        return (obj['ID'] == IDSelected);
+                    });
+
+                    console.log("filteredData1", filteredData1);
+
+                    var xdata = filteredData1.map(a => a.i);
+                    var ydata = filteredData1.map(a => a['Total Embodied Carbon [kgCO2e/m2]']);
+
+                    console.log("xdata", xdata);
+                    console.log("ydata", ydata);
+
+                    var plotly1Data = [
+                        {
+                            x: xdata,
+                            y: ydata,
+                            type: 'bar'
+                        }
+                    ];
+                    console.log("plotly1Data", plotly1Data);
+
+                    Plotly.newPlot('Plotly1', plotly1Data);
+                });
+
+                // Filter data
+                var IDSelected = $('#Dropdown1').children("option:selected").text();
+                //var large_land = cities.filter(function (d) { return d['Option'] = 'Steel Beams & Timber Slab'; });
+                // var filteredData = cities.filter(function (d) { return d['ID'] = IDSelected; });
+                console.log(large_land);
+                console.log("cities", cities);
+
+                // Convert data into 1D Arrays 
+                var xdata = cities.map(a => a.ID);
+                var ydata = cities.map(a => a['Total Embodied Carbon [kgCO2e/m2]']);
+                //console.log("xdata");
+                //console.log(xdata);
+                // console.log(ydata);
+
+
+                // Create Plotly Chart 
+                var data2 = [
+                    {
+                        x: xdata,
+                        y: ydata,
+                        type: 'bar'
+                    }
+                ];
+
+                Plotly.newPlot('myDiv', data2);
+
+                // // Create Charltily Chart
+                // var data1 = { labels: xdata, series: [ydata] };
+                // new Chartist.Bar('.ct-chart', data1);
+
+                // // Create Table 
+
+                // var headers = [];
+                // for (key in cities[0]) {
+                //     var header = {
+                //         title: key,
+                //         field: key
+                //     };
+                //     headers.push(header);
+                // };
+
+                // var table = new Tabulator("#data-table", {
+                //     layout: "fitColumns", //fit columns to width of table (optional)
+                //     columns: headers
+                // });
+
+                // // table.setData(cities);
+
+
+            });
+
+
+        </script>
+
+
+
+
+</body>
+
+</html>

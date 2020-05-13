@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="lib/chartist/chartist.min.css">
+    <link href="https://unpkg.com/tabulator-tables@4.0.5/dist/css/tabulator.min.css" rel="stylesheet">
+
+    <script src='lib/Chart.js'></script>
+    <script src="lib/chartist/chartist.min.js"></script>
+    <script src='lib/d3.js'></script>
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.0.5/dist/js/tabulator.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.51.1/plotly-basic.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+    <div class="jumbotron text-center">
+        <h1>Stage 2 Optioneering Tool</h1>
+    </div>
+
+    <div class="container">
+
+        
+        <!-- <input class="custom-range" id="input" type="range" min="0" value="0" max="6" step="1">
+        <div id="output"></div> -->
+
+        <br></br>
+
+        <div class="row">
+            <div class="col-lg-4"> Choose Primary Span (m): <select class="form-control" name="Dropdown2" id="Dropdown2"></select> </div>
+            <div class="col-lg-4"> Choose Secondary Span (m): <select class="form-control" name="Dropdown2" id="Dropdown3"></select> </div>
+            <div class="col-lg-4"> Choose Beam Depth (mm): <select class="form-control" name="Dropdown2" id="Dropdown4"></select> </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>Embodied Carbon: Total</h3>
+                <div id='Plotly1'> </div>
+            </div>
+            <div class="col-lg-6">
+                <h3>Embodied Carbon: By Material</h3>
+                <div id='Plotly2'> </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+            <h3>Embodied Carbon: All Options</h3>
+
+            <div id='myDiv'> </div>
+            <!-- <div class="ct-chart ct-perfect-fourth"></div>
+            <div id="data-table"> -->
+            </div>
+        </div>
+    </div>
+
+        <script>
+
+            // Get data 
+            d3.csv("/data/SteelTimber1.csv").then(function (cities) {
+                console.log("cities", cities[0]);
+
+                var uniqueOption = [... new Set(cities.map(a => a.Option))]
+                var uniqueID = [... new Set(cities.map(a => a.ID))]
+                var uniquePrimarySpan = [... new Set(cities.map(a => a['Primary beam span (m)']))]
+                var uniqueSecondarySpan = [... new Set(cities.map(a => a['Secondary beam span (m)']))]
+                var uniqueBeamDepth = [... new Set(cities.map(a => a['Beam Depth']))]
+
+                // console.log("secondarySpan", secondarySpan);
+                // console.log("primarySpan", primarySpan);
+
+                // Populate HTML dropdown with JS array using JQuery 
+                //$('#Dropdown1').empty() // Empty dropdown of previous values 
+                // $.each(uniqueID, function (val, text) {
+                //     $('#Dropdown1').append($('<option></option>').val(val).html(text))
+                // });
+
+                $.each(uniquePrimarySpan, function (val, text) {
+                    $('#Dropdown2').append($('<option></option>').val(val).html(text))
+                });
+
+                $.each(uniqueSecondarySpan, function (val, text) {
+                    $('#Dropdown3').append($('<option></option>').val(val).html(text))
+                });
+
+                $.each(uniqueBeamDepth, function (val, text) {
+                    $('#Dropdown4').append($('<option></option>').val(val).html(text))
+                });
+
+                var IDSelected = uniqueID[0];
+                $(".form-control").change(function () {
+                    // var IDSelected = $(Dropdown1).children("option:selected").text();
+                    var primarySelected = $(Dropdown2).children("option:selected").text();
+                    var secondarySelected = $(Dropdown3).children("option:selected").text();
+                    var beamDepthSelected = $(Dropdown4).children("option:selected").text();
+                    // alert("You have selected - " + IDSelected);
+                    console.log("primarySelected", primarySelected);
+                    console.log("secondarySelected", secondarySelected);
+                    console.log("beamDepthSelected", beamDepthSelected);
+
+                    var filteredData1 = cities.filter(function (obj) {
+                        return (obj['Primary beam span (m)'] == primarySelected) && (obj['Secondary beam span (m)'] == secondarySelected) && (obj['Beam Depth'] == beamDepthSelected);
+                        //return (obj['ID'] == IDSelected);
+                    });
+
+                    console.log("filteredData1", filteredData1);
+                    console.log("Object.keys(foo)", Object.keys(filteredData1[0]));
+
+                    var xdata = filteredData1.map(a => a.Option);
+                    var totalCarbon = filteredData1.map(a => a['Total Embodied Carbon [kgCO2e/m2]']);
+                    var timberCarbon = filteredData1.map(a => a['Timber Embodied Carbon [kgCO2e/m2] ']);
+                    var steelCarbon = filteredData1.map(a => a['Steel Embodied Carbon [kgCO2e/m2]']);
+                    var reinforcementCarbon = filteredData1.map(a => a['Reinforcement Embodied Carbon [kgCO2e/m2] ']);
+                    var concreteCarbon = filteredData1.map(a => a['Concrete Embodied Carbon [kgCO2e/m2] ']);
+                    var foundationsCarbon = filteredData1.map(a => a['Foundations Embodied Carbon [kgCO2e/m2] ']);
+
+                    console.log("timberCarbon", timberCarbon);
+                    console.log("xdata", xdata);
+                    console.log("ydata", ydata);
+
+                    var plotly1Data = [
+                        {
+                            x: xdata,
+                            y: totalCarbon,
+                            type: 'bar'
+                        }
+                    ];
+                    //console.log("plotly1Data", plotly1Data);
+                    Plotly.newPlot('Plotly1', plotly1Data);
+
+                    // //**************** stacked below this 
+
+                    var trace1 = { x: xdata, y: timberCarbon, name: 'Timber', type: 'bar' };
+                    var trace2 = { x: xdata, y: steelCarbon, name: 'Steel', type: 'bar' };
+                    var trace3 = { x: xdata, y: reinforcementCarbon, name: 'Reinforcement', type: 'bar' };
+                    var trace4 = { x: xdata, y: concreteCarbon, name: 'Concrete', type: 'bar' };
+                    var trace5 = { x: xdata, y: foundationsCarbon, name: 'Foundations', type: 'bar' };
+
+                    Plotly.newPlot('Plotly2', [trace2, trace3, trace4, trace5, trace1], { barmode: 'relative' });
+
+                });
+
+                // Convert data into 1D Arrays 
+                var xdata = cities.map(a => a.ID);
+                var ydata = cities.map(a => a['Total Embodied Carbon [kgCO2e/m2]']);
+
+
+
+                // Create Plotly Chart 
+                var data2 = [
+                    {
+                        x: xdata,
+                        y: ydata,
+                        type: 'bar'
+                    }
+                ];
+
+                Plotly.newPlot('myDiv', data2);
+
+
+            });
+
+
+        </script>
+
+
+
+
+</body>
+
+</html>

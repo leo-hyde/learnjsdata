@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="lib/chartist/chartist.min.css">
+    <link href="https://unpkg.com/tabulator-tables@4.0.5/dist/css/tabulator.min.css" rel="stylesheet">
+
+    <script src='lib/Chart.js'></script>
+    <script src="lib/chartist/chartist.min.js"></script>
+    <script src='lib/d3.js'></script>
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.0.5/dist/js/tabulator.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+</head>
+
+<body>
+    <!-- Site content goes here !-->
+
+    <div class="ct-chart ct-perfect-fourth"></div>
+    <div id="data-table">
+
+        <script>
+
+            // Get data 
+            d3.csv("/data/SteelTimber1.csv").then(function (cities) {
+                 console.log("cities[0]");
+                 console.log(cities[0]);
+
+                var uniqueOption = [... new Set(cities.map(a => a.Option))]
+                console.log("uniqueOption", uniqueOption);
+
+                var large_land = cities.filter(function(d) { return d['Option'] = 'Steel Beams & Timber Slab'; });
+                console.log(large_land);
+
+                // Convert data into 1D Arrays 
+                var xdata = cities.map(a => a.ID);
+                var ydata = cities.map(a => a['Total Embodied Carbon [kgCO2e/m2]']);
+                console.log("xdata");
+                console.log(xdata);
+                console.log(ydata);
+
+                // Create Chart
+                var data = { labels: xdata, series: [ydata] };
+                new Chartist.Bar('.ct-chart', data);
+
+
+
+                // Create Table 
+
+                var headers = [];
+                for (key in cities[0]) {
+                    var header = {
+                        title: key,
+                        field: key
+                    };
+                    headers.push(header);
+                };
+
+                var table = new Tabulator("#data-table", {
+                    layout: "fitColumns", //fit columns to width of table (optional)
+                    columns: headers
+                });
+
+                // table.setData(cities);
+
+
+            });
+
+
+
+
+        </script>
+
+
+        <script>
+
+        </script>
+
+
+</body>
+
+</html>
