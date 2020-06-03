@@ -10,19 +10,6 @@ d3.csv("/data/SteelTimber1.csv").then(function (cities) {
   var uniqueSecondarySpan = [... new Set(cities.map(a => a['Secondary beam span (m)']))]
   var uniqueBeamDepth = [... new Set(cities.map(a => a['Beam Depth']))]
 
-  // *** Populate dropdown menus with data 
-  // $.each(uniquePrimarySpan, function (val, text) {
-  //   $('#Dropdown2').append($('<option></option>').val(val).html(text))
-  // });
-
-  // $.each(uniqueSecondarySpan, function (val, text) {
-  //   $('#Dropdown3').append($('<option></option>').val(val).html(text))
-  // });
-
-  // $.each(uniqueBeamDepth, function (val, text) {
-  //   $('#Dropdown4').append($('<option></option>').val(val).html(text))
-  // });
-
     // *** Set Slider range to number of options 
   $(document).ready(function () {
     $("#customRange1").attr("max", uniquePrimarySpan.length - 1);
@@ -32,19 +19,9 @@ d3.csv("/data/SteelTimber1.csv").then(function (cities) {
 
   function myDashboard() {
 
-    // document.getElementById('output1').innerHTML = uniquePrimarySpan[$("#customRange1").val()];
-    // document.getElementById('output2').innerHTML = uniqueSecondarySpan[$("#customRange2").val()];
-    // document.getElementById('output3').innerHTML = uniqueBeamDepth[$("#customRange3").val()];
-
     var primarySelected = document.getElementById('output1').innerHTML = uniquePrimarySpan[$("#customRange1").val()];
     var secondarySelected = document.getElementById('output2').innerHTML = uniqueSecondarySpan[$("#customRange2").val()];
     var beamDepthSelected = document.getElementById('output3').innerHTML = uniqueBeamDepth[$("#customRange3").val()];
-
-      // Get dropdown value 
-    // var primarySelected = $(Dropdown2).children("option:selected").text();
-    // var secondarySelected = $(Dropdown3).children("option:selected").text();
-    // var beamDepthSelected = $(Dropdown4).children("option:selected").text();
-
 
     // filter data based on dropdown menu value 
     var filteredData1 = cities.filter(function (obj) {
@@ -60,10 +37,6 @@ d3.csv("/data/SteelTimber1.csv").then(function (cities) {
     var reinforcementCarbon = filteredData1.map(a => a['Reinforcement Embodied Carbon [kgCO2e/m2] ']);
     var concreteCarbon = filteredData1.map(a => a['Concrete Embodied Carbon [kgCO2e/m2] ']);
     var foundationsCarbon = filteredData1.map(a => a['Foundations Embodied Carbon [kgCO2e/m2] ']);
-
-    // console.log("timberCarbon", timberCarbon);
-    // console.log("xdata", xdata);
-    // console.log("ydata", ydata);
 
     // Graph of total embodied carbon for 1 option 
     var plotly1Data = [
