@@ -15,30 +15,6 @@ d3.csv("/data/SteelTimber1.csv").then(function (cities) {
     $('#Dropdown2').append($('<option></option>').val(val).html(text))
   });
 
-  // ********* 
-  var input = document.getElementById('customRange1'),
-    output = document.getElementById('output');
-
-  $(document).ready(function () {
-    $("#customRange1").attr("max", uniquePrimarySpan.length - 1);
-    $("#customRange2").attr("max", uniqueSecondarySpan.length - 1);
-    $("#customRange3").attr("max", uniqueBeamDepth.length - 1);
-  });
-
-  input.oninput = function () {
-    output.innerHTML = uniquePrimarySpan[this.value];
-  };
-  input.oninput();
-
-  $(".custom-range").change(function () {
-    document.getElementById('output1').innerHTML = uniquePrimarySpan[$(Dropdown1).value];
-    document.getElementById('output2').innerHTML = uniquePrimarySpan[$(Dropdown2).value];
-    document.getElementById('output3').innerHTML = uniquePrimarySpan[$(Dropdown3).value];
-
-      return });
-
-  // ********* 
-
   $.each(uniqueSecondarySpan, function (val, text) {
     $('#Dropdown3').append($('<option></option>').val(val).html(text))
   });
@@ -46,6 +22,40 @@ d3.csv("/data/SteelTimber1.csv").then(function (cities) {
   $.each(uniqueBeamDepth, function (val, text) {
     $('#Dropdown4').append($('<option></option>').val(val).html(text))
   });
+
+    // ********* 
+    var input = document.getElementById('customRange1'),
+    output = document.getElementById('output');
+
+  $(document).ready(function () {
+    $("#customRange1").attr("max", uniquePrimarySpan.length - 1);
+    $("#customRange2").attr("max", uniqueSecondarySpan.length - 1);
+    $("#customRange3").attr("max", uniqueBeamDepth.length - 1);
+    console.log(uniquePrimarySpan.length - 1);
+    console.log(uniqueSecondarySpan.length - 1);
+    console.log(uniqueBeamDepth.length - 1);
+  });
+
+  // input.oninput = function () {
+  //   output.innerHTML = uniquePrimarySpan[this.value];
+  // };
+  // input.oninput();
+
+  $(".custom-range").change(function () {
+    // document.getElementById('output1').innerHTML = uniquePrimarySpan[$(customRange1).value];
+    document.getElementById('output1').innerHTML = uniquePrimarySpan[$("#customRange1").val()];
+    document.getElementById('output2').innerHTML = uniqueSecondarySpan[$("#customRange2").val()];
+    document.getElementById('output3').innerHTML = uniqueBeamDepth[$("#customRange3").val()];
+    // console.log($("#customRange1").val());
+    // $( "#myDivId" );
+
+
+    // document.getElementById('output2').innerHTML = uniqueSecondarySpan[$(customRange2).value];
+    // document.getElementById('output3').innerHTML = uniqueBeamDepth[$(customRange3).value];
+
+      return });
+
+  // ********* 
 
   // When dropdown menu gets changed: 
   var IDSelected = uniqueID[0];
