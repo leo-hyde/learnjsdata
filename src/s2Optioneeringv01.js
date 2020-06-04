@@ -65,11 +65,11 @@ d3.csv("/data/SteelTimber1.csv").then(function (cities) {
     myDashboard()
   });
 
-  // Convert data into 1D Arrays 
+  // Convert data into 1D Arrays
   var xdata = cities.map(a => a.ID);
   var ydata = cities.map(a => a['Total Embodied Carbon [kgCO2e/m2]']);
 
-  // Create Plotly Overview Chart 
+  // Create Plotly Overview Chart
   var data2 = [
     {
       x: xdata,
@@ -80,4 +80,4 @@ d3.csv("/data/SteelTimber1.csv").then(function (cities) {
 
   Plotly.newPlot('myDiv', data2, {yaxis: {title: 'Embodied Carbon (kgCO2e/m2)'},});
 
-});});
+});
